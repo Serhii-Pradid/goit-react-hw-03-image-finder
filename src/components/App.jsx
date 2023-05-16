@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ToastContainer} from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import Searchbar from './Searchbar/Searchbar';
 import {ImageGallery} from './ImageGallery/ImageGallery';
 
@@ -16,24 +16,26 @@ export class App extends Component {
     page: 1,
     loading: false,
     images: [],
-    //id: null
-  }
+    per_page: 12,
+    loadMore: false,
+    error: null,
+      }
 
   handleSearchSubmit = searchQuery => {
     //console.log(searchQuery)
-    this.setState({searchQuery});
+    this.setState({
+      searchQuery,
+      images: [],
+      page: 1,
+      loadMore: false
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
     
     if(prevState.searchQuery !== this.state.searchQuery || prevState.page !== this.state.page) {
-      this.setState({loading: false})
-      this.getImages(this.state.searchQuery, this.state.page)
-      //fetchImage(this.state.searchQuery, this.state.page)
-      //.then(res => res.json())
-      //.then(console.log)
-
-      console.log(this.state.searchQuery)
+       this.getImages(this.state.searchQuery, this.state.page)
+       console.log(this.state.searchQuery)
       }
   }
 
@@ -41,34 +43,39 @@ export class App extends Component {
     this.setState({ loading: true });
     if (!query) {
       return;
-    }
-    try {
+    }    
+      try {
       const { hits, totalHits } = await fetchImage(query, page);
       console.log(hits, totalHits);
       this.setState(prevState => ({
         images: [...prevState.images, ...hits],
         loadMore: this.state.page < Math.ceil(totalHits / this.state.per_page),
       }));
-    } catch (error) {
-      this.setState({ error: error.message });
+    } catch (error) {                          // приймає меседж
+      this.setState({ error: error});          // створюємо новий об"єкт
     } finally {
       this.setState({ loading: false });
     }
   };
-  
+
+  onLoadMore = () => {
+    this.setState(prevState => ({page: prevState.page + 1}))
+    
+  }
+
   render() {
+    
+    const {loading, images, loadMore} = this.state;
 
   return (
     <section>
-    
     <Searchbar onSearchSubmit={this.handleSearchSubmit}/>
     <ToastContainer autoClose={3000}/>
-    {this.state.loading && <h1> Загружаем....</h1>}
+    {loading && <h1> Загружаем....</h1>}
 
-    {/*{this.state.searchQuery && */}
-    <ImageGallery images={this.state.images} />
+     <ImageGallery images={images} />
     
-    <Button />
+    {loadMore && <Button onloadMore={this.onLoadMore} />}
     
 
    {/*
