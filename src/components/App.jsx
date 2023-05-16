@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import {ToastContainer, toast} from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import Searchbar from './Searchbar/Searchbar';
 import {ImageGallery} from './ImageGallery/ImageGallery';
 
-//import Loader from './Loader/Loader';
+import {Loader}from './Loader/Loader';
 import {Button} from './Button/Button';
 //import Modal from './Modal/Modal';
 
@@ -32,12 +32,13 @@ export class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { searchQuery, page } = this.state;
     
-    if(prevState.searchQuery !== this.state.searchQuery || prevState.page !== this.state.page) {
-       this.getImages(this.state.searchQuery, this.state.page)
-       console.log(this.state.searchQuery)
+    if(prevState.searchQuery !== searchQuery || prevState.page !== page) {
+       this.getImages(searchQuery, page)
+       console.log(searchQuery)
       }
-  }
+  };
 
   getImages = async (query, page) => {
     this.setState({ loading: true });
@@ -60,8 +61,7 @@ export class App extends Component {
 
   onLoadMore = () => {
     this.setState(prevState => ({page: prevState.page + 1}))
-    
-  }
+    };
 
   render() {
     
@@ -71,7 +71,8 @@ export class App extends Component {
     <section>
     <Searchbar onSearchSubmit={this.handleSearchSubmit}/>
     <ToastContainer autoClose={3000}/>
-    {loading && <h1> Загружаем....</h1>}
+
+    {loading && <Loader /> } 
 
      <ImageGallery images={images} />
     
@@ -79,7 +80,7 @@ export class App extends Component {
     
 
    {/*
-    <Loader />
+    
 
     
 

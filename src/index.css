@@ -175,7 +175,7 @@ img {
  * Стили компонента Modal
  */
 
-.Overlay {
+/*.Overlay {
   position: fixed;
   top: 0;
   left: 0;
