@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import css from './Searchbar.module.css'
 
 
@@ -16,7 +18,7 @@ class Searchbar extends Component {
     event.preventDefault();
 
     if (this.state.searchQuery.trim() === '') {
-      alert('Введите запрос');
+      toast.error('Введіть слово для пошуку');
       return;
     }
 
