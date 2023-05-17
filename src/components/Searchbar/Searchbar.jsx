@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {toast} from 'react-toastify';
+import { FcSearch } from "react-icons/fc";
+
 import 'react-toastify/dist/ReactToastify.css'
 import css from './Searchbar.module.css'
 
@@ -37,8 +39,8 @@ class Searchbar extends Component {
 
   <form onSubmit={this.handleSubmit} className={css.SearchForm}>
     <button type="submit" className={css.SearchFormButton}>
-      <span className={css.SearchFormButtonLabel}>Search</span>
-    </button>
+      <span> <FcSearch size={25} /> </span> 
+    </button> 
 
     <input
       className={css.SearchFormInput}

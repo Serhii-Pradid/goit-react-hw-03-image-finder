@@ -3,9 +3,9 @@ import {ToastContainer} from 'react-toastify';
 import Searchbar from './Searchbar/Searchbar';
 import {ImageGallery} from './ImageGallery/ImageGallery';
 
-import {Loader}from './Loader/Loader';
+import {Loader} from './Loader/Loader';
 import {Button} from './Button/Button';
-//import Modal from './Modal/Modal';
+import {Modal} from './Modal/Modal';
 
 import { fetchImage } from "./Api/Api";
 
@@ -19,6 +19,8 @@ export class App extends Component {
     per_page: 12,
     loadMore: false,
     error: null,
+    showModal: false,
+    largeImageURL: 'largeImageURL',
       }
 
   handleSearchSubmit = searchQuery => {
@@ -27,8 +29,8 @@ export class App extends Component {
       searchQuery,
       images: [],
       page: 1,
-      loadMore: false
-    });
+      loadMore: false,
+      });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -63,28 +65,32 @@ export class App extends Component {
     this.setState(prevState => ({page: prevState.page + 1}))
     };
 
+    openModal = largeImageURL => {
+this.setState({showModal: true, largeImageURL: largeImageURL})
+   };
+
+   closeModal = () => {
+    this.setState({showModal: false}) 
+       };
+
   render() {
     
-    const {loading, images, loadMore} = this.state;
+    const {loading, images, loadMore, showModal, largeImageURL} = this.state;
 
   return (
     <section>
+
     <Searchbar onSearchSubmit={this.handleSearchSubmit}/>
+
     <ToastContainer autoClose={3000}/>
 
     {loading && <Loader /> } 
 
-     <ImageGallery images={images} />
+     <ImageGallery images={images} openModal={this.openModal}/>
     
-    {loadMore && <Button onloadMore={this.onLoadMore} />}
+    {loadMore && <Button onLoadMore={this.onLoadMore} />}
     
-
-   {/*
-    
-
-    
-
-  <Modal />*/}
+   {showModal && <Modal largeImageURL={largeImageURL} onClose={this.closeModal} />}
 
     </section>
     
