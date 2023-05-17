@@ -7,7 +7,7 @@ import {Loader} from './Loader/Loader';
 import {Button} from './Button/Button';
 import {Modal} from './Modal/Modal';
 
-import { fetchImage } from "./Api/Api";
+import { fetchImage } from "./Api/api";
 import { toast } from "react-toastify";
 
 export class App extends Component {
