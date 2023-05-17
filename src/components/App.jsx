@@ -8,6 +8,7 @@ import {Button} from './Button/Button';
 import {Modal} from './Modal/Modal';
 
 import { fetchImage } from "./Api/Api";
+import { toast } from "react-toastify";
 
 export class App extends Component {
 
@@ -21,6 +22,7 @@ export class App extends Component {
     error: null,
     showModal: false,
     largeImageURL: 'largeImageURL',
+    status: 'idle'
       }
 
   handleSearchSubmit = searchQuery => {
@@ -50,7 +52,22 @@ export class App extends Component {
       try {
       const { hits, totalHits } = await fetchImage(query, page);
       console.log(hits, totalHits);
-      this.setState(prevState => ({
+
+      if (hits.length === 0) {
+        toast.warning( 'Sorry, there are no images matching your search query. Please try again', {
+          position: "top-center",
+          theme: "colored",
+        })
+          }
+        
+      if (hits.length !== 0 && page === 1) {
+        toast.success(`Hooray!!! We found ${totalHits} images`, {
+          position: "top-left",
+          theme: "colored",
+        })
+          }
+        
+        this.setState(prevState => ({
         images: [...prevState.images, ...hits],
         loadMore: this.state.page < Math.ceil(totalHits / this.state.per_page),
       }));
@@ -75,20 +92,20 @@ this.setState({showModal: true, largeImageURL: largeImageURL})
 
   render() {
     
-    const {loading, images, loadMore, showModal, largeImageURL} = this.state;
+    const {loading, loadMore, images, showModal, largeImageURL} = this.state;
 
   return (
     <section>
 
     <Searchbar onSearchSubmit={this.handleSearchSubmit}/>
 
-    <ToastContainer autoClose={3000}/>
+    <ToastContainer autoClose={2000}/>
 
-    {loading && <Loader /> } 
+    {loading && <Loader /> }  
 
      <ImageGallery images={images} openModal={this.openModal}/>
     
-    {loadMore && <Button onLoadMore={this.onLoadMore} />}
+    {loadMore && <Button onLoadMore={this.onLoadMore} />} 
     
    {showModal && <Modal largeImageURL={largeImageURL} onClose={this.closeModal} />}
 

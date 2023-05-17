@@ -5,6 +5,7 @@ export const Loader = () => {
     return (
 
 <div className='Container'>
+
 <MutatingDots 
   height="100"
   width="100"
@@ -20,4 +21,6 @@ export const Loader = () => {
 </div>
     )
 }
+
+
 

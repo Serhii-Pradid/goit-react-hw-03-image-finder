@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {toast} from 'react-toastify';
 import { FcSearch } from "react-icons/fc";
-
-import 'react-toastify/dist/ReactToastify.css'
-import css from './Searchbar.module.css'
+import PropTypes from 'prop-types';
+import 'react-toastify/dist/ReactToastify.css';
+import css from './Searchbar.module.css';
 
 
 class Searchbar extends Component {
@@ -20,7 +20,10 @@ class Searchbar extends Component {
     event.preventDefault();
 
     if (this.state.searchQuery.trim() === '') {
-      toast.error('Введіть слово для пошуку');
+      toast.error('Please, enter the search word', {
+        position: "top-center",
+        theme: "colored",
+      });
       return;
     }
 
@@ -57,6 +60,10 @@ class Searchbar extends Component {
 
     );
 }
+}
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func
 }
 
 export default Searchbar;
